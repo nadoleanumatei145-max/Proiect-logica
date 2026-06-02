@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logică & Fake News</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: Geist, sans-serif;
+            background-color: #FDF8F0;  /* crem deschis */
+            margin: 0;
+            color: #6B2E2A;  /* roșu-brun închis */
+            justify-items: center;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            color: #B53B2E;  /* roșu aprins */
+        }
+        hr {
+            color: #D9B8A4;
+            border: 2px solid #D9B8A4;
+            border-radius: 200px;
+        }
+        /* Navigație */
+        nav {
+            background-color: #FFF4E6;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            color: #6B2E2A;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 0 4%;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-bottom: 1px solid #E6CFB5;
+        }
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #B53B2E;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        .nav-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: #6B2E2A;
+            transition: all 0.2s ease-in-out;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        nav a:hover {
+            background-color: #B53B2E;
+            color: #FFF4E6;
+        }
+        /* Hero section */
+        #hero {
+            position: relative;
+            min-width: 100%;
+            color: #FFF4E6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 706px;
+            background: url('https://images.pexels.com/photos/1197132/pexels-photo-1197132.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover no-repeat;
+        }
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.35);
+            z-index: 0;
+        }
+        #hero h1, #hero a {
+            position: relative;
+            z-index: 2;
+        }
+        #hero h1 {
+            font-size: 7em;
+            margin-bottom: 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 6px 0 #8B2C22;
+            color: #FFF0E0;
+        }
+        #hero a {
+            background-color: #B53B2E;
+            color: #FFF4E6;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 60px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        #hero a:hover {
+            background-color: #942B20;
+            transform: scale(1.02);
+        }
+        /* Categorii info & istorie */
+        .categorie {
+            padding: 20px;
+            width: 90%;
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            background-color: #FFFBF5;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+        .content {
+            flex: 1;
+        }
+        .im {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            min-height: 320px;
+        }
+        img {
+            object-fit: cover;
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 8px solid #EEDBCA;
+            border-radius: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all 0.2s;
+        }
+        /* Curiozitati */
+        #curiozitati {
+            width: 90%;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .box-wrapper {
+            display: flex;
+            flex-direction: row;
+            background-color: #F7EDE2;
+            padding: 20px;
+            border-radius: 30px;
+            justify-content: space-evenly;
+            gap: 2px;
+        }
+        .box {
+            background-color: #FFF9F2;
+            padding: 30px;
+            border-radius: 0;
+            border: 1px solid #E6CDB8;
+            flex: 1;
+            transition: all 0.2s;
+        }
+        .box h3 {
+            color: #B53B2E;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        .box p {
+            color: #4F2A26;
+        }
+        /* iframe video */
+        iframe {
+            border-radius: 20px;
+            border: 6px solid #EEDBCA;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+        }
+        /* Footer */
+        #credits {
+            background-color: #F1E2D4;
+            color: #632A24;
+            border-radius: 24px;
+            min-width: 33%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #D9BAA4;
+        }
+        footer {
+            background-color: #F3E5D8;
+            width: 100%;
+            padding: 40px 7.5%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 40px;
+            border-top: 2px solid #DCC9B4;
+            color: #4F2A26;
+        }
+        footer a {
+            color: #A13E31;
+            text-decoration: underline;
+        }
+        footer a:hover {
+            color: #B33A2A;
+        }
+        ul {
+            list-style-type: square;
+        }
+        /* Responsive */
+        @media (max-width: 1024px) {
+            #hero h1 {
+                font-size: 5em;
+            }
+            .categorie {
+                gap: 20px;
+            }
+            .box-wrapper {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .box {
+                border-radius: 0 !important;
+                border: none;
+                border-bottom: 1px solid #E0CBB6;
+            }
+            .box:first-child {
+                border-radius: 20px 20px 0 0 !important;
+            }
+            .box:last-child {
+                border-radius: 0 0 20px 20px !important;
+                border-bottom: none;
+            }
+            footer {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            #credits {
+                width: 100%;
+                align-items: center;
+            }
+            footer div:last-child {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px 5%;
+            }
+            .nav-header {
+                width: 100%;
+            }
+            #menu-toggle {
+                display: block;
+            }
+            .nav-spacer {
+                display: none;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding-bottom: 20px;
+                gap: 15px;
+            }
+            nav.active .nav-links {
+                display: flex;
+            }
+            nav h2 {
+                font-size: 1.3em;
+                margin: 10px 0;
+            }
+            nav a {
+                width: 100%;
+                text-align: center;
+                padding: 12px;
+                background-color: rgba(181, 59, 46, 0.05);
+            }
+            #hero {
+                height: 500px;
+            }
+            #hero h1 {
+                font-size: 2.8em;
+                text-align: center;
+                padding: 0 10px;
+            }
+            .categorie {
+                flex-direction: column;
+                width: 95%;
+                margin-left: auto;
+                margin-right: auto;
+                gap: 20px;
+            }
+            #istorie {
+                flex-direction: column-reverse;
+            }
+            .im {
+                height: 280px;
+                flex: none;
+            }
+            img {
+                border-width: 5px;
+            }
+            iframe {
+                width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 16 / 9;
+            }
+            footer {
+                padding: 40px 5%;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-header">
+        <h2>🧠 Logică & Fake News</h2>
+        <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+    </div>
+    <div class="nav-links">
+        <a href="#hero">Acasă</a>
+        <a href="#info">Informații</a>
+        <a href="#istorie">Istorie</a>
+        <a href="#curiozitati">Curiozități</a>
+        <a href="#video">Resurse</a>
+    </div>
+</nav>
+
+<div id="hero">
+    <h1>Dezlegă minciunile<br>Gândește critic</h1>
+    <a href="#info"><b>Start</b> ↓</a>
+</div>
+
+<div class="categorie" id="info">
+    <div class="content">
+        <h1>📰 Informații generale</h1>
+        <p><strong>Ce sunt știrile false (fake news)?</strong> Informații false sau înșelătoare prezentate ca fiind reale, răspândite intenționat sau nu. În era digitală, dezinformarea afectează deciziile politice, sănătatea publică și coeziunea socială. Gândirea critică și logica sunt armele principale împotriva acestui fenomen.</p>
+        <p><strong>De ce suntem vulnerabili?</strong> Efectul de confirmare (căutăm informații care ne confirmă convingerile), heuristicile mentale și conținutul emoțional contribuie la propagarea rapidă a dezinformării. Verificarea surselor, analiza argumentelor și detectarea părtinirilor sunt abilități vitale în orele de logică.</p>
+        <p><strong>Metode uzuale de manipulare:</strong> apelul la autoritate falsă, titluri senzaționaliste, deepfake-uri, manipularea statistică. O lecție de logică te învață să identifici erorile informale, să ceri dovezi și să evaluezi validitatea unui discurs.</p>
+    </div>
+    <div class="im">
+        <img src="https://images.pexels.com/photos/5967504/pexels-photo-5967504.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Fake news concept">
+    </div>
+</div>
+
+<div class="categorie" id="istorie">
+    <div class="im">
+        <img src="https://images.pexels.com/photos/210894/pexels-photo-210894.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Newspaper history">
+    </div>
+    <div class="content">
+        <h1>📜 Evoluția dezinformării</h1>
+        <p><b>Antichitate & propagandă:</b> De la inscripțiile false ale lui Octavian Augustus la „scrisorile apocrife” – manipularea opiniei publice nu este nouă. În Roma antică, se răspândeau zvonuri pentru a discredita rivalii.</p>
+        <hr>
+        <p><b>Secolul XIX – Marea fraudă lunară (1835)</b>: Ziarul „New York Sun” a publicat o serie de articole despre existența unor creaturi fantastice pe Lună, fiind unul dintre primele exemple de fake news în masă, generând panică și credulitate.</p>
+        <hr>
+        <p><b>Războiul lumilor (1938)</b>: Emisiunea radio regizată de Orson Welles, care anunța invazia marțiană, a provocat panică reală în rândul ascultătorilor. Ilustrează puterea sugestiei și a contextului.</p>
+        <hr>
+        <p><b>Epoca digitală & rețele sociale</b>: Algoritmi care amplifică conținutul controversat, camerele ecou, teoriile conspirației (ex: Pământul plat, 5G și COVID-19). Lecțiile de logică ne ajută să demontăm astfel de falsuri și să recunoaștem pattern-urile manipulării.</p>
+    </div>
+</div>
+
+<div id="curiozitati">
+    <h1>🧩 Curiozități logice & fake news</h1>
+    <div class="box-wrapper">
+        <div class="box" style="border-radius: 20px 0 0 20px;">
+            <h3>1. Paradoxul fake-news-ului viral</h3>
+            <p>Un studiu MIT a arătat că știrile false se răspândesc de 6 ori mai repede decât cele adevărate pe Twitter, din cauza noutății și a încărcăturii emoționale. O minciună senzațională prinde rapid teren.</p>
+        </div>
+        <div class="box">
+            <h3>2. Efectul Dunning-Kruger</h3>
+            <p>Persoanele cu cunoștințe minime într-un domeniu tind să-și supraestimeze competența, ceea ce le face vulnerabile la dezinformare. Logica ne învață să recunoaștem limitele propriului cunoaștere.</p>
+        </div>
+        <div class="box">
+            <h3>3. Biasul confirmării</h3>
+            <p>Avem tendința să căutăm și să interpretăm informațiile care ne susțin opiniile preexistente. Acesta este motivul principal pentru care oamenii cad pradă știrilor false conforme cu convingerile lor.</p>
+        </div>
+        <div class="box">
+            <h3>4. Deepfake-uri & inteligența artificială</h3>
+            <p>Tehnologia deepfake poate genera videoclipuri ultrarealiste cu persoane spunând lucruri neveridice. În lecțiile de logică, învățăm să verificăm sursele și să folosim instrumente de fact-checking.</p>
+        </div>
+        <div class="box" style="border-radius: 0 20px 20px 0">
+            <h3>5. Mitul „vânzătorilor de vești” </h3>
+            <p>În Roma antică, existau „acta diurna” (buletine oficiale), dar și „falsuri comerciale”. Deja pe atunci se răspândeau informații false pentru a manipula prețurile grâului.</p>
+        </div>
+    </div>
+</div>
+
+<div class="categorie" id="video" style="flex-direction: column; gap: 20px; background: #FDF5EA;">
+    <h1 style="width: 100%; text-align: center;">🎥 Resurse video & tehnici de logică</h1>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 40px; justify-content: center; background-color: #F6EDE2; padding: 40px 20px; border-radius: 40px;">
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/sbVYwBVVm2s?si=uLYWAnAhQHFcXRSz" title="Cum să identifici fake news" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/7FCu5Smvxws?si=_sBzEBDl_CwiB18v" title="Gândirea critică împotriva manipulării" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/IpJwNmJRi_E?si=nYNOIFk8h0Q_7BqM" title="Erori logice frecvente în dezbateri" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/cSKGa_7XJkg?si=q4cQZXFk9S8ox4Kd" title="Verificarea faptelor – ghid practic" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <p style="text-align: center; font-style: italic; margin-top: 20px;">🎓 Documentare, cursuri și animații care explică mecanismele fake news și ale raționamentului logic.</p>
+</div>
+
+<footer>
+    <div id="credits">
+        <img src="https://cngmm.ro/new/img/cngmm_logo_550.png" style="border: none; border-radius: 18px; object-fit: cover; display: block; position: relative; width: 80%; height: auto; background: #DDCBB8; padding: 6px;">
+        <p><b>Elevi implicati:</b> Nadoleanu Matei, Ilie Rares, Miron Mihnea</p>
+        <p><b>Proiect – ORE DE LOGICĂ</b><br>Tematica Fake News & Gândire critică</p>
+    </div>
+    <div>
+        <h1 style="margin-top: 0; font-size: 1.8rem;">📚 Bibliografie & resurse</h1>
+        <ul>
+            <li><a href="https://www.politifact.com/" target="_blank">PolitiFact – Fact-checking internațional</a></li>
+            <li><a href="https://www.caleidoscop.ro/educatie/logica-si-gandirea-critica/" target="_blank">Caleidoscop – Logica și gândirea critică (ro)</a></li>
+            <li><a href="https://ro.wikipedia.org/wiki/%C8%98tire_fals%C4%83" target="_blank">Wikipedia – Știre falsă / Fake news</a></li>
+            <li><a href="https://www.consilium.europa.eu/ro/policies/eu-disinformation-policy/" target="_blank">Consiliul European – Politica anti-dezinformare</a></li>
+            <li><a href="https://www.firstdraftnews.org/" target="_blank">First Draft News – alfabetizare media</a></li>
+            <li><a href="https://toolbox.factcheck.org/" target="_blank">FactCheck.org Toolbox</a></li>
+            <li><a href="https://www.youtube.com/c/CrashCourse" target="_blank">Crash Course – Media Literacy (YouTube)</a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+    (function() {
+        // Hamburger menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const nav = document.querySelector('nav');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        if (menuToggle && nav) {
+            menuToggle.addEventListener('click', () => {
+                nav.classList.toggle('active');
+            });
+        }
+
+        // Close mobile menu after clicking a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (nav && nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+
+        // Optional: small visual shadow for hero title for better appearance (stil similar ca original)
+        const heroTitle = document.querySelector('#hero h1');
+        if (heroTitle) {
+            // adăugăm un efect de text-shadow mai pronunțat (pe lângă cel din CSS)
+            let shadowStr = '';
+            for (let i = 1; i <= 6; i++) {
+                shadowStr += `0 ${i}px 0 #81261C, `;
+            }
+            shadowStr += '0 12px 20px rgba(0,0,0,0.2)';
+            heroTitle.style.textShadow = shadowStr;
+        }
+
+        // Adăugare efect de evidență la hover pentru imagini (optional)
+        const allImages = document.querySelectorAll('.im img');
+        allImages.forEach(img => {
+            img.addEventListener('mouseenter', () => {
+                img.style.transform = 'scale(1.02)';
+                img.style.transition = 'transform 0.2s';
+            });
+            img.addEventListener('mouseleave', () => {
+                img.style.transform = 'scale(1)';
+            });
+        });
+    })();
+</script>
+</body>
+</html>
